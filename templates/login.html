@@ -14,15 +14,15 @@
 <body>
     <header class="topbar">
         <div class="container inner">
-            <a class="logo" href="index.html">KanoonSathi</a>
+            <a class="logo" href="/">KanoonSathi</a>
             <nav class="menu">
-                <a href="index.html">Home</a>
-                <a href="consult.html">Consult AI</a>
-                <a href="lawyers.html">Find Lawyer</a>
-                <a href="appointments.html">My Appointments</a>
-                <a href="lawyer-register.html">Lawyer Register</a>
-                <a href="signup.html" class="auth-link">Signup</a>
-                <a href="login.html" class="active auth-link">Login</a>
+                <a href="/">Home</a>
+                <a href="/consult/">Consult AI</a>
+                <a href="/lawyers/">Find Lawyer</a>
+                <a href="/appointments/">My Appointments</a>
+                <a href="/lawyer-register/">Lawyer Register</a>
+                <a href="/signup/" class="auth-link">Signup</a>
+                <a href="/login/" class="active auth-link">Login</a>
             </nav>
             <div class="hamburger" onclick="toggleMenu()">
                 <span></span>
@@ -49,7 +49,7 @@
                 </form>
                 <button id="googleBtn" class="btn-outline full-width" type="button">Continue with Google</button>
                 <p id="msg" class="subtitle"></p>
-                <p class="subtitle">New user? <a href="signup.html">Create an account</a></p>
+                <p class="subtitle">New user? <a href="/signup/">Create an account</a></p>
             </div>
         </div>
     </section>
@@ -65,7 +65,7 @@
         document.getElementById("loginForm").addEventListener("submit", async (e) => {
             e.preventDefault();
             try {
-                const data = await fetchJson("/login", {
+                const data = await fetchJson("/login/", {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify({
@@ -75,7 +75,8 @@
                 })
                 });
                 window.KanoonAuth.saveAuth(data);
-                location.href = "index.html";
+                
+                location.href = "/";
             } catch (err) {
                 msg.textContent = err.message;
                 msg.style.color = "#b91c1c";
@@ -93,7 +94,8 @@
                     body: JSON.stringify({ email, name })
                 });
                 window.KanoonAuth.saveAuth(data);
-                location.href = "index.html";
+            
+                location.href = "/";
             } catch (err) {
                 msg.textContent = err.message;
                 msg.style.color = "#b91c1c";

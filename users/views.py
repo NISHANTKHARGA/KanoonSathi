@@ -1,7 +1,4 @@
 from django.shortcuts import render, redirect
-# from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
-# from django.contrib.auth import login, logout, authenticate
-# from django.contrib.auth.decorators import login_required
 
 import json
 from django.http import JsonResponse
@@ -11,8 +8,11 @@ from django.contrib.auth import login,logout, authenticate
 
 # Create your views here.
 
+def home(request):
+    return render(request, 'index.html')
+
 @csrf_exempt  # needed because JS fetch doesn't send Django's csrf token
-def register(request):
+def signup(request):
     if request.method == 'POST':
         data = json.loads(request.body)  # reads the JSON sent by frontend
 
@@ -54,8 +54,6 @@ def login_view(request):
     return render(request, 'login.html')
 
 
-# def dashboard(request):
-#     return render(request, 'index.html')
 @csrf_exempt
 def logout_view(request):
     if request.method == 'POST':
@@ -65,9 +63,6 @@ def logout_view(request):
     return JsonResponse({'error': 'Invalid method'}, status=405)
 
 
-# def logout_view(request):
-#     logout(request)
-#     return redirect('login')
 def dashboard(request):
     if not request.user.is_authenticated:  # replaces @login_required
         return JsonResponse({'error': 'Please login first'}, status=401)
