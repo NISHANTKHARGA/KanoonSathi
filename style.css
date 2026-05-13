@@ -50,7 +50,7 @@ body {
 
 .menu {
     display: flex;
-    gap: 0.5rem;
+    gap: 1rem;
     align-items: center;
 }
 
@@ -60,10 +60,17 @@ body {
     background: transparent;
     border: 0;
     color: #6e6670;
-    padding: 0.55rem 0.9rem;
+    padding: 0.75rem 1rem;
     border-radius: 999px;
     cursor: pointer;
     font-weight: 600;
+    transition: background 0.2s ease, color 0.2s ease;
+}
+
+.menu a:hover,
+.menu button:hover {
+    background: rgba(169, 16, 42, 0.08);
+    color: var(--primary-dark);
 }
 
 .menu a.auth-link {
@@ -178,18 +185,348 @@ body {
 .card {
     background: var(--card);
     border: 1px solid var(--border);
-    border-radius: 14px;
-    padding: 1rem;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    border-radius: 18px;
+    padding: 1.6rem;
+    box-shadow: 0 18px 45px rgba(29, 15, 21, 0.08);
 }
 
-.lawyer-photo {
+.auth-card {
+    max-width: 540px;
+    margin: 0 auto;
+    padding: 2rem;
+}
+
+.auth-card .title {
+    margin-bottom: 0.4rem;
+}
+
+.auth-card .subtitle {
+    margin-bottom: 1.65rem;
+    line-height: 1.7;
+}
+
+.form-control {
+    display: grid;
+    gap: 0.35rem;
+    margin-bottom: 1rem;
+}
+
+.form-control label {
+    font-size: 0.92rem;
+    color: var(--muted);
+}
+
+.form-control input,
+.form-control select,
+.form-control textarea {
     width: 100%;
-    height: 180px;
-    object-fit: cover;
-    border-radius: 10px;
+    padding: 0.95rem 1rem;
     border: 1px solid var(--border);
-    margin-bottom: 0.6rem;
+    border-radius: 12px;
+    background: #fff;
+    font-size: 1rem;
+    color: var(--text);
+    transition: border-color 0.25s ease, box-shadow 0.25s ease;
+}
+
+.form-control input:focus,
+.form-control select:focus,
+.form-control textarea:focus {
+    outline: none;
+    border-color: rgba(169, 16, 42, 0.6);
+    box-shadow: 0 0 0 4px rgba(169, 16, 42, 0.08);
+}
+
+.filter-grid select {
+    position: relative;
+    z-index: 1;
+}
+
+.filter-grid select:focus {
+    z-index: 10;
+}
+
+
+.input-note {
+    color: var(--muted);
+    font-size: 0.92rem;
+}
+
+.form-progress {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+    margin-bottom: 1.5rem;
+}
+
+.progress-step {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.progress-dot {
+    width: 1.1rem;
+    height: 1.1rem;
+    border-radius: 50%;
+    border: 1px solid var(--border);
+    display: grid;
+    place-items: center;
+    background: #fff;
+    color: var(--muted);
+    font-size: 0.85rem;
+    font-weight: 700;
+}
+
+.progress-step.active .progress-dot,
+.progress-step.completed .progress-dot {
+    border-color: var(--primary);
+    background: var(--primary);
+    color: #fff;
+}
+
+.progress-text {
+    font-size: 0.95rem;
+    color: var(--muted);
+}
+
+.lawyer-fields {
+    border: 1px solid #f0e5e7;
+    border-radius: 14px;
+    padding: 1.25rem;
+    background: #fff6f7;
+    margin-top: 1rem;
+}
+
+.lawyer-fields h3 {
+    margin: 0 0 1rem;
+    font-size: 1rem;
+    color: var(--text);
+}
+
+.file-input {
+    position: relative;
+}
+
+.file-input input[type="file"] {
+    cursor: pointer;
+}
+
+.file-hint {
+    display: block;
+    color: var(--muted);
+    font-size: 0.9rem;
+    margin-top: 0.35rem;
+}
+
+.step-controls {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    align-items: center;
+    margin-top: 0.5rem;
+}
+
+.step-controls .btn-outline {
+    width: auto;
+    padding: 0.85rem 1.2rem;
+}
+
+.btn-primary.full,
+.btn-outline.full-width {
+    width: 100%;
+}
+
+.footer {
+    margin-top: 3rem;
+    background: #fff;
+    border-top: 1px solid var(--border);
+    padding: 3rem 0;
+}
+
+.footer-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr;
+    gap: 1.4rem;
+}
+
+.footer p {
+    color: var(--muted);
+    line-height: 1.75;
+}
+
+.appointments-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.appointment-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    background: #fff;
+}
+
+.appointment-info h3 {
+    margin: 0 0 0.25rem;
+    font-size: 1rem;
+    color: var(--text);
+}
+
+.appointment-info p {
+    margin: 0.25rem 0;
+    color: var(--muted);
+    font-size: 0.9rem;
+}
+
+.appointment-time {
+    font-weight: 600;
+    color: var(--primary);
+}
+
+.join-meeting {
+    padding: 0.5rem 1rem;
+    font-size: 0.9rem;
+}
+
+.schedule-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.schedule-item {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 0.75rem;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: #fafafa;
+}
+
+.schedule-time {
+    font-weight: 600;
+    color: var(--primary);
+    min-width: 80px;
+}
+
+.earnings-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 1rem;
+}
+
+.earning-item {
+    text-align: center;
+    padding: 1rem;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: #fafafa;
+}
+
+.earning-label {
+    display: block;
+    color: var(--muted);
+    font-size: 0.9rem;
+    margin-bottom: 0.5rem;
+}
+
+.reviews-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.review-item {
+    padding: 1rem;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: #fafafa;
+}
+
+.review-item p {
+    margin: 0 0 0.5rem;
+    font-style: italic;
+}
+
+.review-author {
+    display: block;
+    color: var(--muted);
+    font-size: 0.9rem;
+    margin-bottom: 0.25rem;
+}
+
+.review-rating {
+    color: var(--gold);
+    font-size: 1.1rem;
+}
+
+.notifications-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.notification-item {
+    padding: 0.75rem;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    background: #fafafa;
+}
+
+.notification-item p {
+    margin: 0 0 0.25rem;
+    font-size: 0.95rem;
+}
+
+.notification-time {
+    color: var(--muted);
+    font-size: 0.85rem;
+}
+
+.profile-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.profile-actions .btn-outline {
+    text-align: center;
+    padding: 0.75rem;
+}
+
+@media (max-width: 930px) {
+    .menu {
+        display: none;
+    }
+
+    .grid-4,
+    .grid-3,
+    .footer-grid,
+    .form-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .progress-step {
+        flex-wrap: wrap;
+    }
+
+    .appointment-item {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1rem;
+    }
+
+    .join-meeting {
+        width: 100%;
+    }
 }
 
 .stat strong {
@@ -215,6 +552,7 @@ body {
 .filter-card {
     margin-bottom: 2rem;
     padding: 1.5rem;
+    border-radius: 18px;
 }
 
 .filter-card h3 {
@@ -233,12 +571,14 @@ body {
 .filter-group {
     display: flex;
     flex-direction: column;
+    position: relative;
 }
 
 .filter-group label {
     font-weight: 600;
     margin-bottom: 0.5rem;
     color: var(--text);
+    font-size: 0.92rem;
 }
 
 .filter-group input,
@@ -247,13 +587,20 @@ body {
     border: 1px solid var(--border);
     border-radius: 8px;
     font-size: 1rem;
+    background-color: #fff;
+    cursor: pointer;
+}
+
+.filter-group select {
+    appearance: auto;
+    padding-right: 2rem;
 }
 
 .filter-group input:focus,
 .filter-group select:focus {
     outline: none;
     border-color: var(--primary);
-    box-shadow: 0 0 0 2px rgba(161, 16, 42, 0.1);
+    box-shadow: 0 0 0 3px rgba(169, 16, 42, 0.12);
 }
 
 .lawyers-results {
@@ -593,6 +940,27 @@ textarea {
 
 .form-grid .full {
     grid-column: 1 / -1;
+}
+
+.form-step {
+    grid-column: 1 / -1;
+}
+
+.form-step:not(.active) {
+    display: none;
+}
+
+.step-controls {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+    margin-top: 0.5rem;
+}
+
+.step-controls .btn-outline {
+    width: auto;
+    padding: 0.9rem 1.2rem;
 }
 
 .role-selection {

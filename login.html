@@ -17,7 +17,6 @@
                 <a href="consult.html">Consult AI</a>
                 <a href="lawyers.html">Find Lawyer</a>
                 <a href="appointments.html">My Appointments</a>
-                <a href="lawyer-register.html">Lawyer Register</a>
                 <a href="signup.html" class="auth-link">Signup</a>
                 <a href="login.html" class="active auth-link">Login</a>
             </nav>
@@ -35,18 +34,29 @@
                 <h2 class="title">Login</h2>
                 <p class="subtitle">Welcome back to KanoonSathi.</p>
                 <form id="loginForm" class="form-grid">
-                    <input id="email" class="full" type="email" placeholder="Email" required />
-                    <input id="password" class="full" type="password" placeholder="Password" required />
-                    <select id="role" class="full" required>
-                        <option value="user">Login as User</option>
-                        <option value="lawyer">Login as Lawyer</option>
-                        <option value="admin">Login as Admin</option>
-                    </select>
-                    <button class="btn-primary full" type="submit">Login</button>
+                    <div class="form-control full">
+                        <label for="email">Email address</label>
+                        <input id="email" type="email" placeholder="name@domain.com" required />
+                    </div>
+                    <div class="form-control full">
+                        <label for="password">Password</label>
+                        <input id="password" type="password" placeholder="Enter password" required />
+                    </div>
+                    <div class="form-control role-selection full">
+                        <label class="radio-label">
+                            <input type="radio" name="role" value="user" checked />
+                            <span>Login as User</span>
+                        </label>
+                        <label class="radio-label">
+                            <input type="radio" name="role" value="lawyer" />
+                            <span>Login as Lawyer</span>
+                        </label>
+                    </div>
+                    <button class="btn-primary full" type="submit">Login securely</button>
                 </form>
                 <button id="googleBtn" class="btn-outline full-width" type="button">Continue with Google</button>
                 <p id="msg" class="subtitle"></p>
-                <p class="subtitle">New user? <a href="signup.html">Create an account</a></p>
+                <p class="subtitle">New to KanoonSathi? <a href="signup.html">Create an account</a></p>
             </div>
         </div>
     </section>
@@ -61,14 +71,15 @@
         document.getElementById("loginForm").addEventListener("submit", async (e) => {
             e.preventDefault();
             try {
+                const role = document.querySelector('input[name="role"]:checked').value;
                 const data = await fetchJson("/login", {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify({
                         email: document.getElementById("email").value.trim(),
                         password: document.getElementById("password").value,
-                    role: document.getElementById("role").value
-                })
+                        role
+                    })
                 });
                 window.KanoonAuth.saveAuth(data);
                 location.href = "index.html";

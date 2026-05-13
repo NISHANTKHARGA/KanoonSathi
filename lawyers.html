@@ -17,7 +17,6 @@
                 <a href="consult.html">Consult AI</a>
                 <a href="lawyers.html" class="active">Find Lawyer</a>
                 <a href="appointments.html">My Appointments</a>
-                <a href="lawyer-register.html">Lawyer Register</a>
                 <a href="signup.html" class="auth-link">Signup</a>
                 <a href="login.html" class="auth-link">Login</a>
             </nav>
@@ -46,6 +45,36 @@
                         <label for="area">Legal Area</label>
                         <select id="area">
                             <option value="All">All Areas</option>
+                            <option value="Administrative Law">Administrative Law</option>
+                            <option value="Aviation Law">Aviation Law</option>
+                            <option value="Banking and Finance Law">Banking and Finance Law</option>
+                            <option value="Business/Corporate Law">Business/Corporate Law</option>
+                            <option value="Civil Law">Civil Law</option>
+                            <option value="Constitutional Law">Constitutional Law</option>
+                            <option value="Consumer Protection Law">Consumer Protection Law</option>
+                            <option value="Contract Law">Contract Law</option>
+                            <option value="Criminal Law">Criminal Law</option>
+                            <option value="Cybersecurity Law">Cybersecurity Law</option>
+                            <option value="Data Protection Law">Data Protection Law</option>
+                            <option value="Education Law">Education Law</option>
+                            <option value="Employment Law">Employment Law</option>
+                            <option value="Entertainment Law">Entertainment Law</option>
+                            <option value="Environmental Law">Environmental Law</option>
+                            <option value="Estate/Probate Law">Estate/Probate Law</option>
+                            <option value="Family Law">Family Law</option>
+                            <option value="Human Rights Law">Human Rights Law</option>
+                            <option value="Immigration Law">Immigration Law</option>
+                            <option value="Intellectual Property Law">Intellectual Property Law</option>
+                            <option value="International Law">International Law</option>
+                            <option value="Labor Law">Labor Law</option>
+                            <option value="Maritime Law">Maritime Law</option>
+                            <option value="Medical Malpractice Law">Medical Malpractice Law</option>
+                            <option value="Personal Injury Law">Personal Injury Law</option>
+                            <option value="Property Law">Property Law</option>
+                            <option value="Real Estate Law">Real Estate Law</option>
+                            <option value="Sports Law">Sports Law</option>
+                            <option value="Tax Law">Tax Law</option>
+                            <option value="Tort Law">Tort Law</option>
                         </select>
                     </div>
                     <div class="filter-group">
@@ -91,14 +120,7 @@
         const sampleLawyers = [];
 
         async function initAreas() {
-            try {
-                const areas = await fetchJson("/api/legal-areas");
-                area.innerHTML = `<option>All</option>${areas.map(a => `<option>${escapeHtml(a)}</option>`).join("")}`;
-            } catch (error) {
-                // Fallback to hardcoded areas
-                const areas = ["Civil Law", "Family Law", "Criminal Law", "Property Law", "Labor Law", "Business Law", "Constitutional Law", "Land Rights"];
-                area.innerHTML = `<option>All</option>${areas.map(a => `<option>${escapeHtml(a)}</option>`).join("")}`;
-            }
+            // Areas are now hardcoded in HTML for immediate visibility
         }
 
         function render(items) {

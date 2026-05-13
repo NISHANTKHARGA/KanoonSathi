@@ -17,7 +17,6 @@
                 <a href="consult.html">Consult AI</a>
                 <a href="lawyers.html">Find Lawyer</a>
                 <a href="appointments.html">My Appointments</a>
-                <a href="lawyer-register.html">Lawyer Register</a>
                 <a href="signup.html" class="auth-link">Signup</a>
                 <a href="login.html" class="auth-link">Login</a>
             </nav>
@@ -139,22 +138,13 @@
                 const authLinks = nav.querySelectorAll('.auth-link');
                 authLinks.forEach(link => link.style.display = 'none');
 
-                // Add logout button
-                const logoutBtn = document.createElement('a');
-                logoutBtn.href = '#';
-                logoutBtn.textContent = 'Logout';
-                logoutBtn.onclick = () => window.KanoonAuth.logout();
-                logoutBtn.className = 'auth-link';
-                nav.appendChild(logoutBtn);
+                // Add dashboard link based on role
+                const dashboardLink = document.createElement('a');
+                dashboardLink.href = auth.role === 'lawyer' ? 'lawyer-dashboard.html' : 'dashboard.html';
+                dashboardLink.textContent = auth.role === 'lawyer' ? 'Lawyer Dashboard' : 'Dashboard';
+                dashboardLink.className = 'dashboard-link';
+                nav.insertBefore(dashboardLink, nav.lastElementChild);
 
-                // Add admin dashboard link if admin
-                if (auth.role === 'admin') {
-                    const adminLink = document.createElement('a');
-                    adminLink.href = 'admin.html';
-                    adminLink.textContent = 'Admin Dashboard';
-                    adminLink.className = 'admin-link';
-                    nav.insertBefore(adminLink, nav.lastElementChild);
-                }
             }
         }
 
