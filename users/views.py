@@ -5,6 +5,8 @@ from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.models import User
 from django.contrib.auth import login, logout, authenticate
+import requests
+
 
 # Create your views here.
 
@@ -85,3 +87,54 @@ def dashboard(request):
         'name': request.user.first_name,
         'email': request.user.email,
     })
+
+
+@csrf_exempt
+def consult_ai(request):
+    if request.method != "POST":
+        return JsonResponse({"error": "Method not allowed"}, status=405)
+
+    try:
+        body = json.loads(request.body)
+        message = body.get("message", "").strip()
+
+        if not message:
+            return JsonResponse({"error": "No message provided"}, status=400)
+
+        # Call your Flask AI service
+        flask_response = requests.post(
+            "http://localhost:5001/ask",
+            json={"question": message},
+            timeout=30
+        )
+
+        ai_data = flask_response.json()
+        answer = ai_data.get("answer", "Sorry, I could not process your request.")
+
+        return JsonResponse({
+            "reply": answer,
+            "area": detect_legal_area(message),
+            "recommended": [],
+            "aiPowered": True
+        })
+
+    except Exception as e:
+        return JsonResponse({"error": str(e)}, status=500)
+
+
+def detect_legal_area(message):
+    message = message.lower()
+    if any(w in message for w in ["landlord", "rent", "deposit", "tenant"]):
+        return "Property / Tenancy Law"
+    elif any(w in message for w in ["fired", "job", "salary", "employer", "worker"]):
+        return "Labor Law"
+    elif any(w in message for w in ["divorce", "marriage", "wife", "husband", "child"]):
+        return "Family Law"
+    elif any(w in message for w in ["police", "arrest", "crime", "fir", "case"]):
+        return "Criminal Law"
+    elif any(w in message for w in ["company", "business", "contract", "agreement"]):
+        return "Business / Contract Law"
+    elif any(w in message for w in ["consumer", "product", "refund", "cheated"]):
+        return "Consumer Protection Law"
+    else:
+        return "General Legal Query"

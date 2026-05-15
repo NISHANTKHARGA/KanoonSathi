@@ -7,4 +7,6 @@ urlpatterns = [
     path('login/', views.login_view, name='login'),
     path('dashboard/', views.dashboard, name='dashboard'),
     path('logout/', views.logout_view, name='logout'),
+ 
+    path("api/consult", views.consult_ai, name="consult_ai"),
 ]
