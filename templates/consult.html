@@ -1,3 +1,4 @@
+{%load static %}
 <!doctype html>
 <html lang="en">
 
@@ -5,21 +6,22 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>KanoonSathi | Consult AI</title>
-    <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="{% static 'style.css' %}" />
 </head>
 
 <body>
     <header class="topbar">
         <div class="container inner">
-            <a class="logo" href="index.html">KanoonSathi</a>
+            <a class="logo" href="/">KanoonSathi</a>
             <nav class="menu">
-                <a href="index.html">Home</a>
-                <a href="consult.html" class="active">Consult AI</a>
-                <a href="lawyers.html">Find Lawyer</a>
-                <a href="appointments.html">My Appointments</a>
-                <a href="lawyer-register.html">Lawyer Register</a>
-                <a href="signup.html" class="auth-link">Signup</a>
-                <a href="login.html" class="auth-link">Login</a>
+                <a href="{% url 'home' %}">Home</a>
+                <a href="{% url 'consult' %}" class="active">Consult AI</a>
+                <a href="{% url 'lawyers' %}">Find Lawyer</a>
+                <a href="{% url 'appointments' %}">My Appointments</a>
+                <a href="{% url 'lawyer_register' %}">Lawyer Register</a>
+                <a href="{% url 'signup' %}" class="auth-link">Signup</a>
+
+                <a href="{% url 'login' %}" class="auth-link">Login</a>
             </nav>
             <div class="hamburger" onclick="toggleMenu()">
                 <span></span>
@@ -104,7 +106,7 @@
             <h3>${escapeHtml(l.name)}</h3>
             <p>${escapeHtml(l.district)} | ${l.experienceYears} years</p>
             <p>Fee NPR ${l.feeNpr}</p>
-            <a class="btn-primary" href="book.html?lawyerId=${encodeURIComponent(l.id)}">Book</a>
+            <a class="btn-primary" href="{% url 'book_appointment' lawyer_id=l.id %}">Book</a>
           </article>
         `).join("");
         }
