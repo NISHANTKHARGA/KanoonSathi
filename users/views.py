@@ -69,16 +69,6 @@ def logout_view(request):
     return JsonResponse({'error': 'Invalid method'}, status=405)
 
 
-# def dashboard(request):
-#     if not request.user.is_authenticated:  # replaces @login_required
-#         return JsonResponse({'error': 'Please login first'}, status=401)
-
-#     return JsonResponse({
-#         'message': 'Welcome to dashboard',
-#         'email': request.user.email,
-#         'name': request.user.first_name
-#     })
-
 def dashboard(request):
     if not request.user.is_authenticated:
         return redirect('login')
@@ -87,6 +77,30 @@ def dashboard(request):
         'name': request.user.first_name,
         'email': request.user.email,
     })
+
+
+def lawyer_dashboard_page(request):
+    return render(request, 'lawyer-dashboard.html')
+
+
+def consult_page(request):
+    return render(request, 'consult.html')
+
+
+def lawyers(request):
+    return render(request, 'lawyers.html')
+
+
+def appointments(request):
+    return render(request, 'appointments.html')
+
+
+def book_appointment(request):
+    return render(request, 'book.html')
+
+
+def meeting(request):
+    return render(request, 'meeting.html')
 
 
 @csrf_exempt
@@ -109,7 +123,8 @@ def consult_ai(request):
         )
 
         ai_data = flask_response.json()
-        answer = ai_data.get("answer", "Sorry, I could not process your request.")
+        answer = ai_data.get(
+            "answer", "Sorry, I could not process your request.")
 
         return JsonResponse({
             "reply": answer,
