@@ -80,6 +80,7 @@
 
       const lawyerSelect = document.getElementById("lawyerId");
       const msg = document.getElementById("msg");
+      const form = document.getElementById("form");
 
       async function loadLawyers() {
         const lawyers = await fetchJson("/api/lawyers");
@@ -93,6 +94,32 @@
             .join("");
         const pre = new URLSearchParams(location.search).get("lawyerId");
         if (pre) lawyerSelect.value = pre;
+      }
+
+      function disableForm(message) {
+        msg.textContent = message;
+        msg.style.color = "red";
+        form.querySelectorAll("input, select, textarea, button").forEach((el) => {
+          el.disabled = true;
+        });
+      }
+
+      function enableForm() {
+        form.querySelectorAll("input, select, textarea, button").forEach((el) => {
+          el.disabled = false;
+        });
+      }
+
+      async function initBookingPage() {
+        const auth = window.KanoonAuth.getUser();
+        if (!auth) {
+          disableForm("Please login before booking an appointment.");
+          return;
+        }
+
+        document.getElementById("userName").value = auth.name || "";
+        document.getElementById("email").value = auth.email || "";
+        await loadLawyers();
       }
 
       document.getElementById("form").onsubmit = async (e) => {
@@ -116,14 +143,15 @@
           });
           msg.textContent = "Appointment booked successfully.";
           msg.style.color = "green";
-          e.target.reset();
+          form.reset();
+          await loadLawyers();
         } catch (err) {
           msg.textContent = err.message;
           msg.style.color = "red";
         }
       };
 
-      loadLawyers();
+      document.addEventListener("DOMContentLoaded", initBookingPage);
 
       // Update navigation based on authentication status
       function updateNavigation() {

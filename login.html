@@ -58,6 +58,14 @@
         }
 
         const msg = document.getElementById("msg");
+
+        // Check if role is specified in URL
+        const params = new URLSearchParams(location.search);
+        const roleFromUrl = params.get('role');
+        if (roleFromUrl && ['user', 'lawyer', 'admin'].includes(roleFromUrl)) {
+            document.getElementById('role').value = roleFromUrl;
+        }
+
         document.getElementById("loginForm").addEventListener("submit", async (e) => {
             e.preventDefault();
             try {

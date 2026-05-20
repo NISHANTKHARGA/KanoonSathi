@@ -117,6 +117,24 @@
       }
 
       const msg = document.getElementById("msg");
+      const form = document.getElementById("form");
+
+      function checkLawyerAuth() {
+        const auth = window.KanoonAuth.getUser();
+        if (!auth) {
+          msg.innerHTML = '<p style="color: #b91c1c;">Please <a href="login.html?role=lawyer">login as a lawyer</a> to register your profile.</p>';
+          form.style.display = "none";
+          return false;
+        }
+        if (auth.role !== "lawyer") {
+          msg.innerHTML = `<p style="color: #b91c1c;">You are logged in as a ${auth.role}, not a lawyer. Please <a href="login.html?role=lawyer">login as a lawyer</a>.</p>`;
+          form.style.display = "none";
+          return false;
+        }
+        form.style.display = "grid";
+        return true;
+      }
+
       document.getElementById("form").onsubmit = async (e) => {
         e.preventDefault();
         try {
@@ -151,12 +169,14 @@
           msg.textContent =
             "Application submitted successfully. Your profile is under review. You will be notified after admin approval.";
           msg.style.color = "green";
-          e.target.reset();
+          form.reset();
         } catch (err) {
           msg.textContent = err.message;
           msg.style.color = "red";
         }
       };
+
+      document.addEventListener("DOMContentLoaded", checkLawyerAuth);
 
       // Update navigation based on authentication status
       function updateNavigation() {

@@ -571,11 +571,11 @@ def book_appointment():
 
 
 # ══════════════════════════════════════════════════════════════════════
-# GET /api/appointments  ← get user's appointments
+# GET /api/appointments  ← get appointments (user's or lawyer's incoming)
 # ══════════════════════════════════════════════════════════════════════
 @app.route('/api/appointments', methods=['GET'])
 def get_appointments():
-    """Get current user's appointments"""
+    """Get appointments - user sees their bookings, lawyer sees incoming requests"""
     auth  = request.headers.get('Authorization', '')
     token = auth.replace('Bearer ', '').strip()
 
@@ -588,30 +588,63 @@ def get_appointments():
     if not user:
         return jsonify({'error': 'Invalid token. Please login again.'}), 401
 
-    appointments = db.execute('''
-        SELECT a.*, l.name as lawyer_name, l.email as lawyer_email, l.phone as lawyer_phone, l.legal_area, l.district
-        FROM appointments a
-        JOIN lawyers l ON a.lawyer_id = l.id
-        WHERE a.user_id = ?
-        ORDER BY a.date DESC, a.time DESC
-    ''', (user['id'],)).fetchall()
+    # If user is a lawyer, show incoming appointment requests
+    if user['role'] == 'lawyer':
+        lawyer = db.execute('SELECT id FROM lawyers WHERE user_id = ?', (user['id'],)).fetchone()
+        if not lawyer:
+            # Lawyer not registered yet
+            return jsonify([])
 
-    return jsonify([{
-        'id': a['id'],
-        'lawyerId': a['lawyer_id'],
-        'lawyerName': a['lawyer_name'],
-        'lawyerEmail': a['lawyer_email'],
-        'lawyerPhone': a['lawyer_phone'],
-        'legalArea': a['legal_area'],
-        'district': a['district'],
-        'date': a['date'],
-        'time': a['time'],
-        'mode': a['mode'],
-        'issueSummary': a['issue_summary'],
-        'chatSummary': a['chat_summary'],
-        'status': a['status'],
-        'createdAt': a['created_at']
-    } for a in appointments])
+        appointments = db.execute('''
+            SELECT a.*, u.name as client_name, u.email as client_email
+            FROM appointments a
+            JOIN users u ON a.user_id = u.id
+            WHERE a.lawyer_id = ?
+            ORDER BY a.date DESC, a.time DESC
+        ''', (lawyer['id'],)).fetchall()
+
+        return jsonify([{
+            'id': a['id'],
+            'lawyerId': a['lawyer_id'],
+            'clientName': a['client_name'],
+            'clientEmail': a['client_email'],
+            'userId': a['user_id'],
+            'date': a['date'],
+            'time': a['time'],
+            'mode': a['mode'],
+            'issueSummary': a['issue_summary'],
+            'chatSummary': a['chat_summary'],
+            'status': a['status'],
+            'createdAt': a['created_at'],
+            'role': 'lawyer'
+        } for a in appointments])
+    else:
+        # Regular user - show their booked appointments
+        appointments = db.execute('''
+            SELECT a.*, l.name as lawyer_name, l.email as lawyer_email, l.phone as lawyer_phone, l.legal_area, l.district
+            FROM appointments a
+            JOIN lawyers l ON a.lawyer_id = l.id
+            WHERE a.user_id = ?
+            ORDER BY a.date DESC, a.time DESC
+        ''', (user['id'],)).fetchall()
+
+        return jsonify([{
+            'id': a['id'],
+            'lawyerId': a['lawyer_id'],
+            'lawyerName': a['lawyer_name'],
+            'lawyerEmail': a['lawyer_email'],
+            'lawyerPhone': a['lawyer_phone'],
+            'legalArea': a['legal_area'],
+            'district': a['district'],
+            'date': a['date'],
+            'time': a['time'],
+            'mode': a['mode'],
+            'issueSummary': a['issue_summary'],
+            'chatSummary': a['chat_summary'],
+            'status': a['status'],
+            'createdAt': a['created_at'],
+            'role': 'user'
+        } for a in appointments])
 
 
 # ══════════════════════════════════════════════════════════════════════
@@ -723,7 +756,8 @@ def get_lawyer_applications():
 
 
 # ══════════════════════════════════════════════════════════════════════
-# PUT /api/admin/lawyers/<id>  ← admin: approve/reject lawyer
+# PUT /api/
+# admin/lawyers/<id>  ← admin: approve/reject lawyer
 # Body: { status, rating }
 # ══════════════════════════════════════════════════════════════════════
 @app.route('/api/admin/lawyers/<int:lawyer_id>', methods=['PUT'])
