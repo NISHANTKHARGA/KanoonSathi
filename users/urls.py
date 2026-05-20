@@ -15,4 +15,5 @@ urlpatterns = [
     path('logout/', views.logout_view, name='logout'),
 
     path("api/consult", views.consult_ai, name="consult_ai"),
+    path("api/auth/google", views.google_oauth, name="google_oauth"),
 ]

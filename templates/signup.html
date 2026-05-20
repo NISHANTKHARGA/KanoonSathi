@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>KanoonSathi | Sign Up</title>
     <link rel="stylesheet" href="{% static 'style.css' %}" />
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
   </head>
 
   <body>
@@ -205,6 +206,15 @@
                   ></textarea>
                 </div>
                 <div class="form-control">
+                  <label for="consultationFee">Consultation fee (NPR)</label>
+                  <input
+                    id="consultationFee"
+                    type="number"
+                    min="0"
+                    placeholder="Enter your consultation fee"
+                  />
+                </div>
+                <div class="form-control">
                   <label for="profilePicture">Profile photo</label>
                   <input id="profilePicture" type="file" accept="image/*" />
                   <span class="file-hint"
@@ -362,6 +372,11 @@
             const lawyerDocuments = Array.from(
               document.getElementById("lawyerDocuments").files,
             ).map((file) => file.name);
+            const consultationFeeInput =
+              document.getElementById("consultationFee");
+            const consultationFee = consultationFeeInput
+              ? consultationFeeInput.value.trim()
+              : "";
             const data = await fetchJson("/signup/", {
               method: "POST",
               headers: { "Content-Type": "application/json" },
@@ -379,9 +394,7 @@
                 availability,
                 languages,
                 bio,
-                consultationFee: document
-                  .getElementById("consultationFee")
-                  .value.trim(),
+                consultationFee,
                 profilePictureName: profilePicture ? profilePicture.name : "",
                 supportingDocuments: lawyerDocuments,
               }),
@@ -401,23 +414,40 @@
       document
         .getElementById("googleBtn")
         .addEventListener("click", async () => {
-          const email = window.prompt("Enter your Google email:");
-          if (!email) return;
-          const name =
-            window.prompt("Enter your display name (optional):") || "";
-          try {
-            const data = await fetchJson("/api/auth/google", {
-              method: "POST",
-              headers: { "Content-Type": "application/json" },
-              body: JSON.stringify({ email, name }),
-            });
-            window.KanoonAuth.saveAuth(data);
-            location.href = "/";
-          } catch (err) {
-            msg.textContent = err.message;
-            msg.style.color = "#b91c1c";
-          }
+          // Initialize Google Sign-In
+          google.accounts.id.initialize({
+            client_id: "{{ google_client_id }}",
+            callback: handleGoogleSignUp,
+          });
+          google.accounts.id.renderButton(
+            document.getElementById("googleBtn"),
+            {
+              theme: "outline",
+              size: "large",
+              text: "continue_with",
+            },
+          );
+          google.accounts.id.prompt();
         });
+
+      async function handleGoogleSignUp(response) {
+        try {
+          const data = await fetchJson("/api/auth/google", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ token: response.credential }),
+          });
+          window.KanoonAuth.saveAuth(data);
+          msg.textContent = "Registration successful. Redirecting to home...";
+          msg.style.color = "#16a34a";
+          setTimeout(() => {
+            location.href = "/";
+          }, 1000);
+        } catch (err) {
+          msg.textContent = err.message;
+          msg.style.color = "#b91c1c";
+        }
+      }
     </script>
   </body>
 </html>

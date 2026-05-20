@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>KanoonSathi | Login</title>
     <link rel="stylesheet" href="{% static 'style.css' %}" />
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
   </head>
 
   <body>
@@ -102,7 +103,7 @@
               }),
             });
             window.KanoonAuth.saveAuth(data);
-            location.href = "/";
+            location.href = "/dashboard/";
           } catch (err) {
             msg.textContent = err.message;
             msg.style.color = "#b91c1c";
@@ -112,23 +113,40 @@
       document
         .getElementById("googleBtn")
         .addEventListener("click", async () => {
-          const email = window.prompt("Enter your Google email:");
-          if (!email) return;
-          const name =
-            window.prompt("Enter your display name (optional):") || "";
-          try {
-            const data = await fetchJson("/api/auth/google", {
-              method: "POST",
-              headers: { "Content-Type": "application/json" },
-              body: JSON.stringify({ email, name }),
-            });
-            window.KanoonAuth.saveAuth(data);
-            location.href = "/";
-          } catch (err) {
-            msg.textContent = err.message;
-            msg.style.color = "#b91c1c";
-          }
+          // Initialize Google Sign-In
+          google.accounts.id.initialize({
+            client_id: "{{ google_client_id }}",
+            callback: handleGoogleSignIn,
+          });
+          google.accounts.id.renderButton(
+            document.getElementById("googleBtn"),
+            {
+              theme: "outline",
+              size: "large",
+              text: "continue_with",
+            },
+          );
+          google.accounts.id.prompt();
         });
+
+      async function handleGoogleSignIn(response) {
+        try {
+          const data = await fetchJson("/api/auth/google", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ token: response.credential }),
+          });
+          window.KanoonAuth.saveAuth(data);
+          msg.textContent = "Login successful. Redirecting...";
+          msg.style.color = "#16a34a";
+          setTimeout(() => {
+            location.href = "/";
+          }, 1000);
+        } catch (err) {
+          msg.textContent = err.message;
+          msg.style.color = "#b91c1c";
+        }
+      }
     </script>
   </body>
 </html>
