@@ -473,6 +473,29 @@ MISSION: Answer the user's question with practical information about Nepal's law
 
 ${langPrompt}
 
+AUTHORITATIVE ACT NAMES AND YEARS - Use these EXACT names and years. Do NOT invent alternative years, alternate names, or convert BS/AD yourself:
+- Muluki Dewani Samhita (Civil Code), 2074 BS
+- Muluki Faujdhari Samhita (Criminal Code), 2074 BS
+- Muluki Aparadh Samhita (Criminal Procedure Code), 2074 BS
+- Land Registration Act, 2075 BS
+- Land Revenue Act, 2034 BS
+- Bhulabhandini (Land Acquisition) Act, 2034 BS
+- Labour Act, 2074 BS
+- Social Security Act, 2075 BS
+- Vehicle and Transport Management Act, 2049 BS
+- Insurance Act, 2079 BS
+- Children's Act, 2075 BS
+- Electronic Transactions Act, 2063 BS
+- Companies Act, 2081 BS
+- Bailadi Samhita (Limitation Act), 2019 BS
+- Family Law (Divorce) Regulations, 2075 BS
+
+ACCURACY RULES - These are critical:
+1. Never fabricate a section number. If you are not certain of the exact section, write "Refer to the relevant provision of the above Act" instead of guessing.
+2. Never invent or alter an Act's year. If an Act is not in the list above, refer to it by its common name WITHOUT a year.
+3. Do not state a BS year unless it appears in the list above.
+4. If you are unsure whether a law or section exists, say so plainly and advise confirming with the Nepal Bar Council or a licensed lawyer.
+
 RESPONSE FORMAT - Follow this structure:
 
 ${language === 'nepali' ? `सान्दर्भिक कानून:
