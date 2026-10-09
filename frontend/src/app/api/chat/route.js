@@ -346,7 +346,10 @@ async function generateWithGroq(systemPrompt, userMessage, context, options = {}
         model: MODEL,
         messages,
         temperature: options.temperature ?? 0.3,
-        max_tokens: options.maxTokens ?? 800,
+        max_tokens: options.maxTokens ?? 2048,
+        // gpt-oss-* are reasoning models. Without this, reasoning tokens eat the
+        // max_tokens budget and the visible answer gets truncated/emptied out.
+        reasoning_effort: options.reasoningEffort ?? 'low',
       }),
     });
 
@@ -500,7 +503,7 @@ Next Steps:
 Disclaimer:
 This information is provided for educational purposes and should not be considered professional legal advice.`}`;
 
-    let response = await generateWithGroq(groqPrompt, normalizedMessage, null, { temperature: isDontUnderstand ? 0.7 : 0.3, maxTokens: 800, conversationHistory });
+    let response = await generateWithGroq(groqPrompt, normalizedMessage, null, { temperature: isDontUnderstand ? 0.7 : 0.3, maxTokens: 2048, conversationHistory });
     let source = response ? 'groq_ai' : 'local_fallback';
 
     if (!response) {

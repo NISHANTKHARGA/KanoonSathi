@@ -25,7 +25,10 @@ async function generateWithGroq(systemPrompt, userMessage, context, options = {}
       model: options.model || 'openai/gpt-oss-120b',
       messages,
       temperature: options.temperature ?? 0.3,
-      max_tokens: options.maxTokens || 800,
+      max_tokens: options.maxTokens || 2048,
+      // gpt-oss-* are reasoning models; cap reasoning so it doesn't consume the
+      // whole max_tokens budget and truncate/empty the visible answer.
+      reasoning_effort: options.reasoningEffort || 'low',
       top_p: options.topP ?? 0.9
     });
     return completion.choices[0]?.message?.content || '';
